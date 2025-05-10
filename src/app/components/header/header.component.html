@@ -1,0 +1,12 @@
+<mat-toolbar [class.scrolled]="isScrolled">
+  <span class="logo">Patrick Baxter</span>
+  <span class="spacer"></span>
+  <div class="nav-links">
+    <button mat-button routerLink="/" (click)="scrollToSection('home')">Home</button>
+    <button mat-button routerLink="/about" (click)="scrollToSection('about')">About</button>
+    <button mat-button routerLink="/skills" (click)="scrollToSection('skills')">Skills</button>
+    <button mat-button routerLink="/experience" (click)="scrollToSection('experience')">Experience</button>
+    <button mat-button routerLink="/projects" (click)="scrollToSection('projects')">Projects</button>
+    <button mat-button routerLink="/contact" (click)="scrollToSection('contact')">Contact</button>
+  </div>
+</mat-toolbar>

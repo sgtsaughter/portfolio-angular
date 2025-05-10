@@ -1,0 +1,159 @@
+.contact-section {
+  background-color: #f9f9f9;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 4rem;
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .title-underline {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, #3f51b5, #f50057);
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+}
+
+.contact-container {
+  background-color: #fff;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contact-info {
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, #3f51b5, #7986cb);
+  color: white;
+
+  h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+
+  mat-icon {
+    margin-right: 1rem;
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .contact-text {
+    h4 {
+      margin: 0 0 0.3rem;
+      font-size: 1.1rem;
+    }
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+      opacity: 0.8;
+    }
+  }
+}
+
+.social-links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: white;
+    text-decoration: none;
+
+    &:hover {
+      transform: translateY(-3px);
+      background-color: white;
+
+      &.linkedin {
+        color: #0077B5;
+      }
+
+      &.github {
+        color: #333;
+      }
+
+      &.twitter {
+        color: #1DA1F2;
+      }
+    }
+
+    mat-icon {
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+}
+
+.contact-form-container {
+  padding: 3rem 2rem;
+  background-color: white;
+}
+
+.contact-form {
+  .form-field {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .contact-container {
+    flex-direction: column;
+  }
+
+  .contact-info, .contact-form-container {
+    max-width: 100%;
+    width: 100%;
+  }
+}

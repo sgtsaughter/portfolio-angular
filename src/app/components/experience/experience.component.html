@@ -1,0 +1,42 @@
+<section id="experience" class="section experience-section">
+  <div class="container">
+    <div class="section-title">
+      <h2>Work Experience</h2>
+      <div class="title-underline"></div>
+    </div>
+
+    <div class="experience-timeline">
+      <div *ngFor="let exp of experiences; let i = index" class="experience-item" [class.left]="i % 2 === 0" [class.right]="i % 2 !== 0">
+        <div class="timeline-dot"></div>
+
+        <mat-card class="experience-card">
+          <mat-card-header>
+            <div class="company-logo"></div>
+            <mat-card-title>{{ exp.role }}</mat-card-title>
+            <mat-card-subtitle>{{ exp.company }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="experience-period">
+              <mat-icon>date_range</mat-icon>
+              <span>{{ exp.period }}</span>
+            </div>
+            <div class="experience-location">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ exp.location }}</span>
+            </div>
+
+            <mat-divider class="my-3"></mat-divider>
+
+            <ul class="experience-responsibilities">
+              <li *ngFor="let item of exp.description">{{ item }}</li>
+            </ul>
+
+            <div class="experience-technologies">
+              <span *ngFor="let tech of exp.technologies" class="tech-badge">{{ tech }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</section>

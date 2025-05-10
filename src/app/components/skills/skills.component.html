@@ -1,0 +1,58 @@
+<section id="skills" class="section skills-section">
+  <div class="container">
+    <div class="section-title">
+      <h2>My Skills</h2>
+      <div class="title-underline"></div>
+    </div>
+
+    <div class="row">
+      <div *ngFor="let category of skillCategories" class="col-lg-4 col-md-6 mb-4">
+        <mat-card class="skill-category-card">
+          <mat-card-header>
+            <mat-card-title>{{ category.name }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="skill-list">
+              <div *ngFor="let skill of category.skills" class="skill-item">
+                <div class="skill-info">
+                  <span class="skill-name">{{ skill.name }}</span>
+                  <span class="skill-percentage">{{ skill.level }}%</span>
+                </div>
+                <mat-progress-bar [color]="skill.color" mode="determinate" [value]="skill.level"></mat-progress-bar>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="skill-chips-section">
+      <div class="chip-category">
+        <h3>Frameworks & Libraries</h3>
+        <div class="chips-container">
+          <mat-chip-set>
+            <mat-chip *ngFor="let framework of frameworks">{{ framework }}</mat-chip>
+          </mat-chip-set>
+        </div>
+      </div>
+
+      <div class="chip-category">
+        <h3>Tools & Platforms</h3>
+        <div class="chips-container">
+          <mat-chip-set>
+            <mat-chip *ngFor="let tool of tools">{{ tool }}</mat-chip>
+          </mat-chip-set>
+        </div>
+      </div>
+
+      <div class="chip-category">
+        <h3>Databases</h3>
+        <div class="chips-container">
+          <mat-chip-set>
+            <mat-chip *ngFor="let db of databases">{{ db }}</mat-chip>
+          </mat-chip-set>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

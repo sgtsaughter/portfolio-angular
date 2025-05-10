@@ -1,0 +1,40 @@
+<section id="projects" class="section projects-section">
+  <div class="container">
+    <div class="section-title">
+      <h2>Projects</h2>
+      <div class="title-underline"></div>
+    </div>
+
+    <div class="row">
+      <div *ngFor="let project of projects" class="col-lg-6 col-md-6 mb-4">
+        <mat-card class="project-card">
+          <img mat-card-image [src]="project.image" [alt]="project.title" class="project-image">
+
+          <mat-card-content>
+            <h3 class="project-title">{{ project.title }}</h3>
+            <p class="project-description">{{ project.description }}</p>
+
+            <div class="project-tech">
+              <span *ngFor="let tech of project.technologies" class="tech-chip">{{ tech }}</span>
+            </div>
+          </mat-card-content>
+
+          <mat-card-actions class="project-actions">
+            <a *ngIf="project.githubLink" mat-button color="primary" [href]="project.githubLink" target="_blank">
+              <mat-icon>code</mat-icon> Code
+            </a>
+            <a *ngIf="project.liveLink" mat-button color="accent" [href]="project.liveLink" target="_blank">
+              <mat-icon>launch</mat-icon> Live Demo
+            </a>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+
+    <div class="more-projects">
+      <button mat-raised-button color="primary">
+        View More Projects
+      </button>
+    </div>
+  </div>
+</section>

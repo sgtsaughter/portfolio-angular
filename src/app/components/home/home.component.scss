@@ -1,0 +1,174 @@
+.home-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  padding-top: 80px;
+}
+
+.content-col {
+  padding: 2rem;
+  animation: fadeIn 1s ease-out;
+}
+
+.animated-text {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #3f51b5, #f50057);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientShift 5s ease infinite;
+}
+
+.subtitle {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  color: #888;
+}
+
+.description {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 15px;
+
+  button {
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+.profile-image-container {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  margin: 0 auto;
+  animation: floating 6s ease-in-out infinite;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  background: #3f51b5;
+  background-image: url('https://placehold.co/400x400/3f51b5/ffffff?text=PB');
+  background-size: cover;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+
+  &-1 {
+    width: 100px;
+    height: 100px;
+    background: rgba(245, 0, 87, 0.5);
+    top: -20px;
+    left: -20px;
+    animation: rotate 15s linear infinite;
+  }
+
+  &-2 {
+    width: 70px;
+    height: 70px;
+    background: rgba(63, 81, 181, 0.6);
+    bottom: 20px;
+    right: -10px;
+    animation: rotate 10s linear infinite reverse;
+  }
+
+  &-3 {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 152, 0, 0.7);
+    bottom: -10px;
+    left: 30%;
+    animation: rotate 12s linear infinite;
+  }
+}
+
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .home-section {
+    padding-top: 60px;
+  }
+
+  .animated-text {
+    font-size: 2.5rem;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+  }
+
+  .profile-image-container {
+    width: 300px;
+    height: 300px;
+    margin-top: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .animated-text {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1.2rem;
+  }
+
+  .content-col, .image-col {
+    text-align: center;
+  }
+
+  .cta-buttons {
+    justify-content: center;
+  }
+}

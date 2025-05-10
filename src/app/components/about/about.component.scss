@@ -1,0 +1,163 @@
+.about-section {
+  background-color: #f9f9f9;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 4rem;
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    position: relative;
+    display: inline-block;
+  }
+
+  .title-underline {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(to right, #3f51b5, #f50057);
+    margin: 0 auto;
+    border-radius: 2px;
+  }
+}
+
+.about-image-container {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.about-image {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.experience-badge {
+  position: absolute;
+  bottom: -25px;
+  right: 30px;
+  background: linear-gradient(45deg, #3f51b5, #f50057);
+  color: white;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  animation: pulse 2s infinite;
+
+  .exp-years {
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .exp-text {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+  }
+}
+
+.about-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.about-description {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+  color: #555;
+}
+
+.about-highlights {
+  margin-bottom: 2rem;
+}
+
+.highlight-item {
+  display: flex;
+  margin-bottom: 1.5rem;
+
+  mat-icon {
+    color: #3f51b5;
+    margin-right: 1rem;
+    margin-top: 0.25rem;
+  }
+
+  .highlight-content {
+    h4 {
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    p {
+      margin: 0;
+      color: #666;
+    }
+  }
+}
+
+.about-cta {
+  margin-top: 2rem;
+
+  button {
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(63, 81, 181, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(63, 81, 181, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(63, 81, 181, 0);
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .experience-badge {
+    width: 80px;
+    height: 80px;
+    bottom: -20px;
+    right: 20px;
+
+    .exp-years {
+      font-size: 1.5rem;
+    }
+
+    .exp-text {
+      font-size: 0.6rem;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .about-image-container {
+    max-width: 400px;
+    margin: 0 auto 3rem;
+  }
+}
