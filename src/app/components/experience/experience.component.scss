@@ -24,6 +24,76 @@
   }
 }
 
+/* AI Experience Section Styles */
+.ai-experience-section {
+  margin-bottom: 4rem;
+  padding: 2rem;
+  background: rgba(63, 81, 181, 0.05);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.ai-section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+
+  h3 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #3f51b5;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: #666;
+  }
+}
+
+.ai-projects-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+
+.ai-project-card {
+  flex: 1 1 400px;
+  max-width: 500px;
+
+  mat-card {
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  mat-card-title {
+    color: #3f51b5;
+  }
+
+  .project-technologies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+
+    .tech-badge {
+      padding: 0.4rem 0.8rem;
+      background-color: #e8eaf6;
+      color: #3f51b5;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+  }
+}
+
+/* End AI Section Styles */
+
 .experience-timeline {
   position: relative;
   max-width: 1200px;
@@ -112,6 +182,17 @@
   border-radius: 50%;
   background-color: #3f51b5;
   margin-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px solid #eee;
+
+  .logo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .experience-period, .experience-location {
@@ -153,7 +234,6 @@
 .experience-technologies {
   display: flex;
   flex-wrap: wrap;
-
   .tech-badge {
     background-color: rgba(63, 81, 181, 0.1);
     color: #3f51b5;
@@ -166,6 +246,38 @@
 
     &:hover {
       background-color: rgba(63, 81, 181, 0.2);
+    }
+  }
+}
+
+.experience-highlights {
+  margin-top: 1.5rem;
+
+  .highlights-title {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    color: #333;
+  }
+
+  .highlights-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .highlight-badge {
+    background-color: rgba(245, 0, 87, 0.1);
+    color: #f50057;
+    padding: 0.3rem 0.8rem;
+    border-radius: 50px;
+    margin: 0 0.5rem 0.5rem 0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(245, 0, 87, 0.2);
     }
   }
 }

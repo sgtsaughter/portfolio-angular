@@ -1,0 +1,9 @@
+{
+  "assets": [
+    {
+      "glob": "**/*",
+      "input": "src/assets",
+      "output": "/assets"
+    }
+  ]
+}

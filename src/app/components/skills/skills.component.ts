@@ -26,28 +26,30 @@ export class SkillsComponent {  skillCategories: SkillCategory[] = [
     {
       name: 'Frontend Development',
       skills: [
-        { name: 'HTML/CSS', level: 95, color: 'primary' },
-        { name: 'JavaScript', level: 90, color: 'primary' },
-        { name: 'jQuery', level: 90, color: 'primary' },
-        { name: 'Angular JS', level: 85, color: 'primary' },
-        { name: 'AJAX', level: 85, color: 'primary' }
+        { name: 'Angular', level: 95, color: 'primary' },
+        { name: 'HTML/CSS', level: 90, color: 'primary' },
+        { name: 'JavaScript/TypeScript', level: 90, color: 'primary' },
+        { name: 'RxJS', level: 85, color: 'primary' },
+        { name: 'Responsive Design', level: 90, color: 'primary' }
       ]
     },
     {
       name: 'Backend & CMS',
       skills: [
-        { name: 'Drupal', level: 95, color: 'primary' },
-        { name: 'PHP', level: 90, color: 'primary' },
-        { name: 'Drupal 8', level: 90, color: 'primary' },
-        { name: 'Drupal 7', level: 95, color: 'primary' },
-        { name: 'Drupal 6', level: 95, color: 'primary' }
+        { name: 'Node.js', level: 85, color: 'primary' },
+        { name: 'Drupal', level: 90, color: 'primary' },
+        { name: 'PHP', level: 85, color: 'primary' },
+        { name: 'RESTful APIs', level: 90, color: 'primary' },
+        { name: 'SQL/NoSQL Databases', level: 80, color: 'primary' }
       ]
     },
-    {      name: 'Tools & Other',
+    {      name: 'Advanced & Emerging',
       skills: [
-        { name: 'Git', level: 95, color: 'primary' },
-        { name: 'Microsoft Office', level: 95, color: 'primary' },
-        { name: 'Photoshop', level: 75, color: 'accent' }
+        { name: 'AI Integration', level: 80, color: 'primary' },
+        { name: 'Git/Version Control', level: 95, color: 'primary' },
+        { name: 'Testing (Unit/E2E)', level: 85, color: 'primary' },
+        { name: 'CI/CD', level: 80, color: 'primary' },
+        { name: 'Agile Methodologies', level: 90, color: 'primary' }
       ]
     }
   ];

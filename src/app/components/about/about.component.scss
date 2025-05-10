@@ -112,11 +112,14 @@
 .about-cta {
   margin-top: 2rem;
 
-  button {
+  button, a[mat-raised-button] {
     padding: 0.5rem 1.5rem;
     border-radius: 50px;
     font-weight: 500;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
 
     &:hover {
       transform: translateY(-3px);

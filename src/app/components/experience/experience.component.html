@@ -5,13 +5,39 @@
       <div class="title-underline"></div>
     </div>
 
+    <!-- AI Experience Section -->
+    <div class="ai-experience-section" *ngIf="showAISection">
+      <div class="ai-section-header">
+        <h3>{{ aiExperience.title }}</h3>
+        <p>{{ aiExperience.description }}</p>
+      </div>
+
+      <div class="ai-projects-container">
+        <div *ngFor="let project of aiExperience.projects" class="ai-project-card">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>{{ project.name }}</mat-card-title>
+              <mat-card-subtitle>{{ project.period }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <p>{{ project.description }}</p>
+              <div class="project-technologies">
+                <span *ngFor="let tech of project.technologies" class="tech-badge">{{ tech }}</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+
     <div class="experience-timeline">
       <div *ngFor="let exp of experiences; let i = index" class="experience-item" [class.left]="i % 2 === 0" [class.right]="i % 2 !== 0">
-        <div class="timeline-dot"></div>
-
-        <mat-card class="experience-card">
+        <div class="timeline-dot"></div>        <mat-card class="experience-card">
           <mat-card-header>
-            <div class="company-logo"></div>
+            <div class="company-logo" *ngIf="exp.logoUrl">
+              <img [src]="exp.logoUrl" alt="{{ exp.company }} logo" class="logo-img">
+            </div>
+            <div class="company-logo" *ngIf="!exp.logoUrl"></div>
             <mat-card-title>{{ exp.role }}</mat-card-title>
             <mat-card-subtitle>{{ exp.company }}</mat-card-subtitle>
           </mat-card-header>
@@ -29,10 +55,16 @@
 
             <ul class="experience-responsibilities">
               <li *ngFor="let item of exp.description">{{ item }}</li>
-            </ul>
-
-            <div class="experience-technologies">
+            </ul>            <div class="experience-technologies">
               <span *ngFor="let tech of exp.technologies" class="tech-badge">{{ tech }}</span>
+            </div>
+
+            <div *ngIf="exp.highlights && exp.highlights.length > 0" class="experience-highlights">
+              <mat-divider class="my-2"></mat-divider>
+              <h4 class="highlights-title">Highlights</h4>
+              <div class="highlights-container">
+                <span *ngFor="let highlight of exp.highlights" class="highlight-badge">{{ highlight }}</span>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>
