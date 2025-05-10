@@ -65,12 +65,21 @@
             <textarea matInput formControlName="message" rows="6" placeholder="Your message here..."></textarea>
             <mat-error *ngIf="contactForm.get('message')?.hasError('required')">Message is required</mat-error>
             <mat-error *ngIf="contactForm.get('message')?.hasError('minlength')">Message must be at least 10 characters</mat-error>
-          </mat-form-field>
-
-          <button mat-raised-button color="primary" type="submit" class="submit-button">
-            <mat-icon>send</mat-icon> Send Message
+          </mat-form-field>          <button mat-raised-button color="primary" type="submit" class="submit-button" [disabled]="isSubmitting">
+            <mat-icon *ngIf="!isSubmitting">send</mat-icon>
+            <mat-spinner *ngIf="isSubmitting" diameter="24" color="accent" class="button-spinner"></mat-spinner>
+            <span *ngIf="!isSubmitting">Send Message</span>
+            <span *ngIf="isSubmitting">Sending...</span>
           </button>
         </form>
+        
+        <div *ngIf="formSubmitted" class="success-message">
+          <mat-icon color="primary">check_circle</mat-icon>
+          <div class="success-text">
+            <h4>Thank You!</h4>
+            <p>Your message has been sent successfully. I'll get back to you as soon as possible.</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

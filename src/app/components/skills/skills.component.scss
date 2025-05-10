@@ -144,6 +144,24 @@ mat-progress-bar {
   }
 }
 
+/* Certification styles */
+.certification-section {
+  margin-top: 2rem;
+  
+  .certification-chip {
+    background: linear-gradient(to right, rgba(63, 81, 181, 0.1), rgba(245, 0, 87, 0.1));
+    color: #3f51b5;
+    font-weight: 500;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: linear-gradient(to right, rgba(63, 81, 181, 0.2), rgba(245, 0, 87, 0.2));
+      transform: translateY(-2px);
+    }
+  }
+}
+
 .skill-list {
   padding: 1rem 0;
 }

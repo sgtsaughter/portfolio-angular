@@ -25,6 +25,32 @@ interface Project {
 })
 export class ProjectsComponent {  projects: Project[] = [
     {
+      title: 'AI-Powered Task Management App',
+      description: 'Developed a modern task management application using Angular that integrates with OpenAI API to provide intelligent task prioritization and categorization. The application uses natural language processing to understand user inputs and organize tasks in a meaningful way.',
+      image: 'https://placehold.co/600x400/3f51b5/ffffff?text=AI+Task+Manager',
+      period: '2023 - Present',
+      organization: 'Personal Project',
+      technologies: ['Angular', 'TypeScript', 'OpenAI API', 'RxJS', 'Angular Material'],
+      githubLink: 'https://github.com/sgtsaughter/ai-task-manager'
+    },
+    {
+      title: 'Fleet Management Dashboard',
+      description: 'Created an interactive data visualization dashboard for vehicle tracking and analytics. The dashboard provides real-time updates on vehicle locations, maintenance schedules, and performance metrics with AI-powered insights for fleet optimization.',
+      image: 'https://placehold.co/600x400/673ab7/ffffff?text=Fleet+Dashboard',
+      period: '2022 - 2023',
+      organization: 'Intellishift',
+      technologies: ['Angular', 'TypeScript', 'D3.js', 'Machine Learning APIs', 'RESTful Services']
+    },
+    {
+      title: 'E-commerce Platform',
+      description: 'Built a custom e-commerce platform with integrated payment processing, inventory management, and customer management features. The platform includes a responsive frontend and a robust admin dashboard for managing products and orders.',
+      image: 'https://placehold.co/600x400/2196f3/ffffff?text=E-commerce+Platform',
+      period: '2021 - 2022',
+      organization: 'Personal Project',
+      technologies: ['Angular', 'Node.js', 'MongoDB', 'Stripe API', 'Express.js'],
+      githubLink: 'https://github.com/sgtsaughter/ecommerce-platform'
+    },
+    {
       title: 'NYC Department of Design and Construction Workflow Application',
       description: 'Internal Angular 7 workflow application which handled the application process for new building and infrastructure projects for the Department of Design and Construction of NYC.',
       image: 'https://placehold.co/600x400/3f51b5/ffffff?text=NYC+DDC+App',

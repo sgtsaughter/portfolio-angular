@@ -43,13 +43,20 @@
             <mat-chip *ngFor="let tool of tools">{{ tool }}</mat-chip>
           </mat-chip-set>
         </div>
-      </div>
-
-      <div class="chip-category">
+      </div>      <div class="chip-category">
         <h3>Databases</h3>
         <div class="chips-container">
           <mat-chip-set>
             <mat-chip *ngFor="let db of databases">{{ db }}</mat-chip>
+          </mat-chip-set>
+        </div>
+      </div>
+      
+      <div class="chip-category certification-section">
+        <h3>Certifications</h3>
+        <div class="chips-container">
+          <mat-chip-set>
+            <mat-chip *ngFor="let cert of certifications" class="certification-chip">{{ cert }}</mat-chip>
           </mat-chip-set>
         </div>
       </div>
