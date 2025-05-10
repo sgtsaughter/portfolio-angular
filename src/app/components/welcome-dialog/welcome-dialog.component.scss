@@ -1,0 +1,88 @@
+.welcome-dialog {
+  width: 100%;
+  max-width: 600px;
+  overflow: hidden;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #3f51b5;
+  }
+}
+
+.dialog-content {
+  padding: 0 24px;
+  max-height: 60vh;
+}
+
+.feature-section {
+  margin-bottom: 24px;
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    color: #333;
+  }
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    margin-bottom: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #e8eaf6;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    mat-icon {
+      margin-right: 16px;
+      font-size: 24px;
+      color: #3f51b5;
+    }
+  }
+}
+
+.feature-details {
+  h4 {
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #666;
+  }
+}
+
+@media (max-width: 600px) {
+  .feature-list li {
+    flex-direction: column;
+
+    mat-icon {
+      margin-right: 0;
+      margin-bottom: 8px;
+      align-self: center;
+    }
+  }
+}

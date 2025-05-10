@@ -1,0 +1,41 @@
+<div class="welcome-dialog">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Welcome to Patrick Baxter's Portfolio</h2>
+    <button mat-icon-button (click)="close()" aria-label="Close welcome dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <div class="feature-section">
+      <h3>New Features</h3>
+      <ul class="feature-list">
+        <li>
+          <mat-icon>smart_toy</mat-icon>
+          <div class="feature-details">
+            <h4>AI Chatbot Assistant</h4>
+            <p>Ask questions about my experience, skills, or projects and get instant answers.</p>
+          </div>
+        </li>
+        <li>
+          <mat-icon>accessibility_new</mat-icon>
+          <div class="feature-details">
+            <h4>Accessibility Options</h4>
+            <p>Toggle high contrast, larger text, reduced animations, and text-to-speech using the menu in the bottom left.</p>
+          </div>
+        </li>
+        <li>
+          <mat-icon>devices</mat-icon>
+          <div class="feature-details">
+            <h4>Responsive Design Tester</h4>
+            <p>Preview this site on different device sizes using the tester in the chatbot menu.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close color="primary">Got it!</button>
+  </mat-dialog-actions>
+</div>

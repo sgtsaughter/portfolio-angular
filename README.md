@@ -15,6 +15,9 @@ A modern, responsive portfolio website built with Angular 18 and Angular Materia
   - Project Showcase
   - Contact Form
   - Footer with Quick Links
+- **AI-Powered Chatbot**: Interactive assistant to answer questions about experience and skills
+- **Accessibility Features**: High contrast mode, text-to-speech, large text, reduced motion
+- **Responsive Design Tester**: Built-in tool to preview the site on different devices
 
 ## Technology Stack
 
@@ -25,6 +28,8 @@ A modern, responsive portfolio website built with Angular 18 and Angular Materia
 - **Form Handling**: Reactive Forms
 - **Responsive Design**: CSS Grid and Flexbox
 - **Icons**: Material Icons
+- **Accessibility**: WCAG 2.1 guidelines, screen reader support
+- **AI Integration**: Intelligent chatbot with natural language processing
 
 ## Getting Started
 

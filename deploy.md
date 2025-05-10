@@ -16,6 +16,23 @@ ng build
 
 This will create a `dist/` folder with your compiled application ready for deployment.
 
+## Special Considerations
+
+### Accessibility Features
+
+The portfolio includes several accessibility features:
+- High contrast mode
+- Large text mode
+- Reduced motion
+- Text-to-speech
+- Focus indicators
+
+These are implemented via CSS classes and JavaScript, so they should work on all deployment platforms without additional configuration.
+
+### Chatbot Data Persistence
+
+The chatbot uses localStorage to persist conversations and analytics data. This is client-side only and doesn't require any server-side storage or APIs.
+
 ## Deployment Options
 
 ### 1. GitHub Pages

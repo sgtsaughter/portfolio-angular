@@ -31,29 +31,29 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
-  
+
   &:hover {
     transform: translateY(-15px) scale(1.02);
     box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
-    
+
     .project-image {
       transform: scale(1.1);
     }
-    
+
     mat-card-title {
       color: #3f51b5;
     }
-    
+
     .mat-mdc-card-content {
       border-top: 2px solid rgba(63, 81, 181, 0.2);
     }
   }
-  
+
   .mat-mdc-card-content {
     transition: all 0.3s ease;
     border-top: 2px solid transparent;
   }
-  
+
   .mat-mdc-card-actions {
     padding: 16px;
     display: flex;

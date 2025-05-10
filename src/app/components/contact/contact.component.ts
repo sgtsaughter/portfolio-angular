@@ -41,12 +41,12 @@ export class ContactComponent {
     if (this.contactForm.valid) {
       this.isSubmitting = true;
       console.log('Form submitted:', this.contactForm.value);
-      
+
       // Simulate API call with timeout
       setTimeout(() => {
         this.isSubmitting = false;
         this.formSubmitted = true;
-        
+
         // Here you would typically send this data to a backend API
         this.snackBar.open('Message sent successfully! I\'ll get back to you soon.', 'Close', {
           duration: 5000,

@@ -1,0 +1,88 @@
+<div class="chatbot-container" [class.open]="isChatOpen">
+  <!-- Chat Toggle Button -->  <button mat-fab class="chat-toggle-button"
+          (click)="toggleChat()"
+          aria-label="Chat with Patrick's AI Assistant"
+          [matBadge]="unreadCount"
+          [matBadgeHidden]="!hasUnreadMessages"
+          matBadgeColor="warn"
+          matBadgeSize="small"
+          matBadgePosition="above before">
+    <mat-icon>{{ isChatOpen ? 'close' : 'smart_toy' }}</mat-icon>
+    <span class="chat-tooltip" *ngIf="!isChatOpen && !hasUnreadMessages">Ask about Patrick's experience</span>
+    <span class="chat-tooltip" *ngIf="!isChatOpen && hasUnreadMessages">New messages - Click to view</span>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window">    <div class="chat-header">
+      <div class="chat-header-title">
+        <mat-icon>smart_toy</mat-icon>
+        <h3>Chat with Patrick's AI Assistant</h3>
+      </div>      <div class="chat-header-actions">
+        <button mat-icon-button (click)="openResponsiveTester()" aria-label="Test responsive design" matTooltip="Test responsive design">
+          <mat-icon>devices</mat-icon>
+        </button>
+        <button mat-icon-button (click)="clearChatHistory()" aria-label="Clear conversation" matTooltip="Clear conversation">
+          <mat-icon>delete_outline</mat-icon>
+        </button>
+        <button mat-icon-button (click)="toggleChat()" aria-label="Close chat">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+      <div class="chat-messages" #chatMessages>
+      <div *ngFor="let message of messages; let i = index"
+           class="message-container"
+           [ngClass]="{
+             'user-message': message.sender === 'user',
+             'bot-message': message.sender === 'bot',
+             'new-message': i === messages.length - 1 && message.sender === 'bot'
+           }">
+        <div class="message-avatar">
+          <mat-icon *ngIf="message.sender === 'bot'">smart_toy</mat-icon>
+          <mat-icon *ngIf="message.sender === 'user'">person</mat-icon>
+        </div>
+        <div class="message-content">
+          <div class="message-bubble">
+            <p [innerHTML]="message.content"></p>
+          </div>
+          <div class="message-time">
+            {{ message.timestamp | date:'shortTime' }}
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="isProcessing" class="message-container bot-message">
+        <div class="message-avatar">
+          <mat-icon>smart_toy</mat-icon>
+        </div>
+        <div class="message-content">
+          <div class="message-bubble typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>    </div>
+
+    <div class="chat-input">
+      <form (ngSubmit)="sendMessage($event)">
+        <mat-form-field appearance="outline" class="message-field">          <input matInput
+                 [formControl]="messageInput"
+                 placeholder="Ask about Patrick's skills, experience..."
+                 autocomplete="off"
+                 (keydown.enter)="sendMessage($event)">
+          <button *ngIf="messageInput.value" matSuffix mat-icon-button aria-label="Clear" (click)="messageInput.reset(); $event.stopPropagation()">
+            <mat-icon>close</mat-icon>
+          </button>        </mat-form-field>
+        <button mat-mini-fab
+                color="primary"
+                type="button"
+                (click)="sendMessage($event)"
+                [disabled]="messageInput.invalid || isProcessing"
+                aria-label="Send message">
+          <mat-icon>send</mat-icon>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

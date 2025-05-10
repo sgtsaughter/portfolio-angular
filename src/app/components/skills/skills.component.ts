@@ -65,7 +65,7 @@ export class SkillsComponent {  skillCategories: SkillCategory[] = [
         { name: 'Linux/Unix', level: 80, color: 'primary' }      ]
     }
   ];
-  
+
   frameworks: string[] = ['Angular', 'Angular JS', 'Drupal 8', 'Drupal 7', 'Drupal 6', 'WordPress', 'Express.js'];
   tools: string[] = ['Git', 'VS Code', 'JIRA', 'Figma', 'Docker', 'Photoshop', 'CI/CD Pipelines'];
   databases: string[] = ['MySQL', 'MongoDB', 'MariaDB', 'PostgreSQL'];

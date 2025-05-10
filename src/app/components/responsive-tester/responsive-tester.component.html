@@ -1,0 +1,49 @@
+<div class="responsive-tester-container">
+  <div class="tester-header">
+    <h2>Responsive Design Tester</h2>
+    <div class="device-selector">
+      <mat-select [(ngModel)]="selectedDevice" (selectionChange)="setDevice($event.value)">
+        <mat-select-trigger>
+          <div class="device-option">
+            <mat-icon>{{selectedDevice.icon}}</mat-icon>
+            <span>{{selectedDevice.name}}</span>
+          </div>
+        </mat-select-trigger>
+        <mat-option *ngFor="let device of devicePresets" [value]="device">
+          <div class="device-option">
+            <mat-icon>{{device.icon}}</mat-icon>
+            <span>{{device.name}} ({{device.width}}x{{device.height}})</span>
+          </div>
+        </mat-option>
+      </mat-select>
+
+      <button mat-icon-button (click)="toggleOrientation()" matTooltip="Toggle orientation">
+        <mat-icon>{{ currentOrientation === 'portrait' ? 'stay_current_portrait' : 'stay_current_landscape' }}</mat-icon>
+      </button>
+    </div>
+    <button mat-icon-button (click)="close()" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="viewport-container" [class]="currentOrientation">
+    <div class="device-frame" [class]="isMobile ? 'mobile' : 'desktop'"
+         [style.max-width.px]="frameWidth"
+         [style.max-height.px]="frameHeight">
+      <div class="device-header" *ngIf="isMobile">
+        <div class="device-notch"></div>
+      </div>
+      <iframe [src]="currentUrl | safeUrl" frameborder="0"
+              [style.width.px]="frameWidth"
+              [style.height.px]="frameHeight"></iframe>
+      <div class="device-footer" *ngIf="isMobile">
+        <div class="device-home-button"></div>
+      </div>
+    </div>
+
+    <div class="viewport-info">
+      <span>{{selectedDevice.name}} - {{frameWidth}}x{{frameHeight}}px</span>
+      <span class="orientation-label">{{currentOrientation}}</span>
+    </div>
+  </div>
+</div>

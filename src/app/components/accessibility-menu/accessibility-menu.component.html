@@ -1,0 +1,90 @@
+<div class="accessibility-menu-container" [class.open]="isMenuOpen">
+  <button mat-fab
+          class="accessibility-toggle"
+          (click)="toggleMenu()"
+          aria-label="Toggle accessibility options"
+          matTooltip="Accessibility options">
+    <mat-icon>accessibility_new</mat-icon>
+  </button>
+
+  <div class="accessibility-panel" role="dialog" aria-labelledby="accessibility-title">
+    <div class="panel-header">
+      <h2 id="accessibility-title">Accessibility Options</h2>
+      <button mat-icon-button (click)="toggleMenu()" aria-label="Close accessibility menu">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="panel-content">
+      <div class="option-item">
+        <div class="option-label">
+          <mat-icon>contrast</mat-icon>
+          <span>High Contrast</span>
+        </div>
+        <mat-slide-toggle
+          [checked]="settings.highContrast"
+          (change)="toggleSetting('highContrast')"
+          aria-label="Toggle high contrast mode">
+        </mat-slide-toggle>
+      </div>
+
+      <div class="option-item">
+        <div class="option-label">
+          <mat-icon>format_size</mat-icon>
+          <span>Larger Text</span>
+        </div>
+        <mat-slide-toggle
+          [checked]="settings.largeText"
+          (change)="toggleSetting('largeText')"
+          aria-label="Toggle larger text">
+        </mat-slide-toggle>
+      </div>
+
+      <div class="option-item">
+        <div class="option-label">
+          <mat-icon>slow_motion_video</mat-icon>
+          <span>Reduce Animations</span>
+        </div>
+        <mat-slide-toggle
+          [checked]="settings.reducedMotion"
+          (change)="toggleSetting('reducedMotion')"
+          aria-label="Toggle reduced motion">
+        </mat-slide-toggle>
+      </div>
+
+      <div class="option-item">
+        <div class="option-label">
+          <mat-icon>record_voice_over</mat-icon>
+          <span>Text to Speech</span>
+        </div>
+        <mat-slide-toggle
+          [checked]="settings.textToSpeech"
+          (change)="toggleSetting('textToSpeech')"
+          aria-label="Toggle text to speech">
+        </mat-slide-toggle>
+      </div>
+
+      <div class="option-item">
+        <div class="option-label">
+          <mat-icon>keyboard</mat-icon>
+          <span>Focus Indicators</span>
+        </div>
+        <mat-slide-toggle
+          [checked]="settings.keyboardFocus"
+          (change)="toggleSetting('keyboardFocus')"
+          aria-label="Toggle keyboard focus indicators">
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <div class="panel-footer">
+      <button mat-button (click)="resetSettings()" aria-label="Reset all accessibility settings to defaults">
+        <mat-icon>restart_alt</mat-icon>
+        Reset to Defaults
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Screen reader only announcement element -->
+<div aria-live="assertive" class="sr-only" role="status"></div>

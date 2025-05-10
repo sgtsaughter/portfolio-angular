@@ -1,0 +1,149 @@
+.responsive-tester-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.tester-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #3f51b5, #673ab7);
+  color: white;
+  border-bottom: 1px solid #e0e0e0;
+
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 400;
+  }
+}
+
+.device-selector {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 12px;
+
+  mat-select {
+    width: 180px;
+    margin-right: 12px;
+  }
+}
+
+.viewport-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background-color: #f5f5f5;
+  overflow: auto;
+  transition: all 0.3s ease;
+
+  &.landscape {
+    transform: rotate(90deg);
+  }
+}
+
+.device-option {
+  display: flex;
+  align-items: center;
+
+  mat-icon {
+    margin-right: 8px;
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.device-frame {
+  display: flex;
+  flex-direction: column;
+  background-color: #000;
+  border-radius: 24px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+  margin: 24px auto;
+  padding: 12px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  &.mobile {
+    border-radius: 24px;
+    padding: 8px;
+  }
+
+  &.desktop {
+    border-radius: 8px;
+    padding: 16px 16px 20px;
+  }
+
+  iframe {
+    border: none;
+    background-color: white;
+    display: block;
+  }
+}
+
+.device-header {
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .device-notch {
+    width: 80px;
+    height: 16px;
+    background-color: #000;
+    border-radius: 0 0 12px 12px;
+  }
+}
+
+.device-footer {
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .device-home-button {
+    width: 40px;
+    height: 4px;
+    background-color: #444;
+    border-radius: 2px;
+  }
+}
+
+.viewport-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #666;
+
+  .orientation-label {
+    text-transform: capitalize;
+    background-color: #3f51b5;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+}
+
+::ng-deep .responsive-tester-dialog {
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  width: 90vw;
+  height: 90vh;
+
+  .mat-mdc-dialog-surface {
+    border-radius: 8px;
+  }
+}
