@@ -8,10 +8,12 @@
     <div class="row">
       <div *ngFor="let project of projects" class="col-lg-6 col-md-6 mb-4">
         <mat-card class="project-card">
-          <img mat-card-image [src]="project.image" [alt]="project.title" class="project-image">
-
-          <mat-card-content>
+          <img mat-card-image [src]="project.image" [alt]="project.title" class="project-image">          <mat-card-content>
             <h3 class="project-title">{{ project.title }}</h3>
+            <div class="project-metadata">
+              <p class="project-organization">{{ project.organization }}</p>
+              <p class="project-period">{{ project.period }}</p>
+            </div>
             <p class="project-description">{{ project.description }}</p>
 
             <div class="project-tech">
@@ -28,13 +30,8 @@
             </a>
           </mat-card-actions>
         </mat-card>
-      </div>
-    </div>
+      </div>    </div>
 
-    <div class="more-projects">
-      <button mat-raised-button color="primary">
-        View More Projects
-      </button>
-    </div>
+    <!-- Removed "View More Projects" button since all projects are displayed -->
   </div>
 </section>
