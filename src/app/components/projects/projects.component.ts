@@ -3,7 +3,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 
 interface Project {
   title: string;
@@ -19,7 +19,7 @@ interface Project {
 @Component({
   selector: 'app-projects',
   standalone: true,
-  imports: [MatCardModule, MatButtonModule, MatIconModule, MatChipsModule, NgFor],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, MatChipsModule, NgFor, NgIf],
   templateUrl: './projects.component.html',
   styleUrl: './projects.component.scss'
 })

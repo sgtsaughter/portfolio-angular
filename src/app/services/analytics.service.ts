@@ -1,17 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ChatMessage } from './chatbot.service';
 
 export interface ChatAnalytics {
   totalInteractions: number;
   popularTopics: { [key: string]: number };
   averageResponseTime: number;
   sessionDuration: number;
-  messageHistory: {
-    userMessage: string;
-    botResponse: string;
-    timestamp: Date;
-    responseTime: number;
-  }[];
   startTime: Date;
 }
 
@@ -24,6 +17,7 @@ export class AnalyticsService {
 
   constructor() {
     this.analytics = this.loadAnalytics() || this.initializeAnalytics();
+    this.saveAnalytics();
   }
 
   private initializeAnalytics(): ChatAnalytics {
@@ -32,7 +26,6 @@ export class AnalyticsService {
       popularTopics: {},
       averageResponseTime: 0,
       sessionDuration: 0,
-      messageHistory: [],
       startTime: new Date()
     };
   }
@@ -41,16 +34,14 @@ export class AnalyticsService {
     try {
       const savedAnalytics = localStorage.getItem(this.STORAGE_KEY);
       if (savedAnalytics) {
-        const parsedAnalytics = JSON.parse(savedAnalytics);
-
-        // Convert string dates back to Date objects
-        parsedAnalytics.startTime = new Date(parsedAnalytics.startTime);
-        parsedAnalytics.messageHistory = parsedAnalytics.messageHistory.map((item: any) => ({
-          ...item,
-          timestamp: new Date(item.timestamp)
-        }));
-
-        return parsedAnalytics;
+        const parsedAnalytics = JSON.parse(savedAnalytics) as Partial<ChatAnalytics>;
+        return {
+          totalInteractions: Number(parsedAnalytics.totalInteractions) || 0,
+          popularTopics: parsedAnalytics.popularTopics || {},
+          averageResponseTime: Number(parsedAnalytics.averageResponseTime) || 0,
+          sessionDuration: Number(parsedAnalytics.sessionDuration) || 0,
+          startTime: parsedAnalytics.startTime ? new Date(parsedAnalytics.startTime) : new Date()
+        };
       }
     } catch (error) {
       console.error('Failed to load analytics:', error);
@@ -66,23 +57,15 @@ export class AnalyticsService {
     }
   }
 
-  trackInteraction(userMessage: ChatMessage, botResponse: ChatMessage, responseTime: number): void {
+  trackInteraction(userMessage: string, responseTime: number): void {
     this.analytics.totalInteractions++;
-
-    // Track message history
-    this.analytics.messageHistory.push({
-      userMessage: userMessage.content,
-      botResponse: botResponse.content,
-      timestamp: new Date(),
-      responseTime
-    });
 
     // Update average response time
     const totalResponseTime = this.analytics.averageResponseTime * (this.analytics.totalInteractions - 1) + responseTime;
     this.analytics.averageResponseTime = totalResponseTime / this.analytics.totalInteractions;
 
     // Update popular topics
-    this.updatePopularTopics(userMessage.content);
+    this.updatePopularTopics(userMessage);
 
     // Calculate session duration
     this.analytics.sessionDuration = (new Date().getTime() - this.analytics.startTime.getTime()) / 1000; // in seconds

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ChatbotComponent } from './chatbot.component';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 describe('ChatbotComponent', () => {
   let component: ChatbotComponent;
@@ -8,7 +9,8 @@ describe('ChatbotComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ChatbotComponent]
+      imports: [ChatbotComponent],
+      providers: [provideNoopAnimations()]
     })
     .compileComponents();
 

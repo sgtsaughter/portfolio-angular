@@ -16,7 +16,9 @@
   <div class="chat-window">    <div class="chat-header">
       <div class="chat-header-title">
         <mat-icon>smart_toy</mat-icon>
-        <h3>Chat with Patrick's AI Assistant</h3>
+        <div class="chat-header-copy">
+          <h3>Chat with Patrick's AI Assistant</h3>
+        </div>
       </div>      <div class="chat-header-actions">
         <button mat-icon-button (click)="openResponsiveTester()" aria-label="Test responsive design" matTooltip="Test responsive design">
           <mat-icon>devices</mat-icon>
@@ -43,12 +45,19 @@
         </div>
         <div class="message-content">
           <div class="message-bubble">
-            <p [innerHTML]="message.content"></p>
+            <p [textContent]="message.content"></p>
           </div>
           <div class="message-time">
             {{ message.timestamp | date:'shortTime' }}
           </div>
         </div>
+      </div>
+
+      <div class="suggested-questions" *ngIf="messages.length === 1 && !isProcessing">
+        <button type="button" (click)="askSuggestedQuestion('Tell me about Patrick\'s experience')">Work experience</button>
+        <button type="button" (click)="askSuggestedQuestion('What Angular projects has Patrick worked on?')">Angular projects</button>
+        <button type="button" (click)="askSuggestedQuestion('What AI experience does Patrick have?')">AI experience</button>
+        <button type="button" (click)="askSuggestedQuestion('What certifications does Patrick have?')">Certifications</button>
       </div>
 
       <div *ngIf="isProcessing" class="message-container bot-message">
@@ -61,13 +70,16 @@
             <span></span>
             <span></span>
           </div>
+          <small *ngIf="modelStatus" role="status">{{ modelStatus }}</small>
         </div>
-      </div>    </div>
+      </div>
+    </div>
 
     <div class="chat-input">
       <form (ngSubmit)="sendMessage($event)">
         <mat-form-field appearance="outline" class="message-field">          <input matInput
                  [formControl]="messageInput"
+                 maxlength="500"
                  placeholder="Ask about Patrick's skills, experience..."
                  autocomplete="off"
                  (keydown.enter)="sendMessage($event)">

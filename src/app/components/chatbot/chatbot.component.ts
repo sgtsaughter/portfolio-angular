@@ -35,35 +35,28 @@ export class ChatbotComponent implements OnInit {
   @ViewChild('chatMessages') chatMessagesElement!: ElementRef;
 
   messages: ChatMessage[] = [];
-  messageInput = new FormControl('', [Validators.required]);
+  messageInput = new FormControl('', [Validators.required, Validators.maxLength(500)]);
   isChatOpen = false;
   isProcessing = false;
+  modelStatus = '';
   hasUnreadMessages = false;
-  unreadCount = 0;  constructor(
+  unreadCount = 0;
+
+  constructor(
     private chatbotService: ChatbotService,
     private analyticsService: AnalyticsService,
     private accessibilityService: AccessibilityService,
     private dialog: MatDialog
-  ) { }
+  ) {
+    this.chatbotService.modelStatus$.subscribe(status => this.modelStatus = status);
+  }
 
   ngOnInit(): void {
     // Load saved messages from local storage
     this.loadChatHistory();
 
-    // If no messages (new session), add initial greeting
     if (this.messages.length === 0) {
-      // Add initial greeting message
-      this.addBotMessage(`Hi there! 👋 I'm Patrick's virtual assistant, ready to answer your questions about his experience, skills, and projects.`);
-        // Add suggested questions after a short delay
-      setTimeout(() => {
-        this.addBotMessage(`Here are some things you can ask me about:
-        <div class="suggested-questions">
-          <button (click)="askSuggestedQuestion('Tell me about Patrick\\'s experience', $event)">💼 Work Experience</button>
-          <button (click)="askSuggestedQuestion('What Angular projects has Patrick worked on?', $event)">💻 Angular Projects</button>
-          <button (click)="askSuggestedQuestion('Tell me about Patrick\\'s AI skills', $event)">🤖 AI Experience</button>
-          <button (click)="askSuggestedQuestion('What certifications does Patrick have?', $event)">🏆 Certifications</button>
-        </div>`);
-      }, 1000);
+      this.addBotMessage(`Hi there! I'm Patrick's virtual assistant, ready to answer questions about his experience, skills, and projects. Replies run on your device; the first AI reply downloads about 180 MB.`);
     }
   }
   toggleChat(): void {
@@ -107,17 +100,7 @@ export class ChatbotComponent implements OnInit {
       event.stopPropagation();
     }
 
-    this.addUserMessage(question);
-
-    // Set processing state
-    this.isProcessing = true;
-
-    // Get bot response
-    this.chatbotService.processMessage(question).subscribe(response => {
-      this.addMessage(response);
-      this.isProcessing = false;
-      this.scrollToBottom();
-    });
+    this.submitMessage(question);
   }
 
   sendMessage(event: Event): void {
@@ -130,39 +113,38 @@ export class ChatbotComponent implements OnInit {
 
     const userMessage = this.messageInput.value || '';
 
-    // Add user message to chat
-    this.addUserMessage(userMessage);
-
-    // Clear input field
     this.messageInput.reset();
+    this.submitMessage(userMessage);
+  }
 
-    // Set processing state
+  private submitMessage(userMessage: string): void {
+    if (this.isProcessing) {
+      return;
+    }
+
+    this.addUserMessage(userMessage);
     this.isProcessing = true;
+    this.modelStatus = '';
 
     const startTime = new Date().getTime();
+    const conversation = this.messages.slice(0, -1);
+    this.chatbotService.processMessage(userMessage, conversation).subscribe({
+      next: response => {
+        const responseTime = new Date().getTime() - startTime;
+        this.addMessage(response);
+        this.isProcessing = false;
+        this.analyticsService.trackInteraction(userMessage, responseTime);
 
-    // Get bot response
-    this.chatbotService.processMessage(userMessage).subscribe(response => {
-      const responseTime = new Date().getTime() - startTime;
-      this.addMessage(response);
-      this.isProcessing = false;
-      this.scrollToBottom();
-
-      // Track interaction for analytics
-      this.analyticsService.trackInteraction(
-        { content: userMessage, sender: 'user', timestamp: new Date() },
-        response,
-        responseTime
-      );
-
-      // Mark as unread if chat is closed
-      if (!this.isChatOpen) {
-        this.hasUnreadMessages = true;
-        this.unreadCount++;
+        if (!this.isChatOpen) {
+          this.hasUnreadMessages = true;
+          this.unreadCount++;
+        }
+        this.saveChatHistory();
+      },
+      error: () => {
+        this.isProcessing = false;
+        this.addBotMessage('I could not process that question. Please try again.');
       }
-
-      // Save chat history
-      this.saveChatHistory();
     });
   }
 
@@ -197,9 +179,7 @@ export class ChatbotComponent implements OnInit {
 
     // If text-to-speech is enabled, read bot messages aloud
     if (message.sender === 'bot') {
-      // Strip HTML tags for speech
-      const cleanText = message.content.replace(/<[^>]*>/g, ' ');
-      this.accessibilityService.speak(cleanText);
+      this.accessibilityService.speak(message.content);
     }
 
     setTimeout(() => this.scrollToBottom(), 100);
@@ -231,10 +211,23 @@ export class ChatbotComponent implements OnInit {
       const savedChat = localStorage.getItem('patrick-portfolio-chat');
       if (savedChat) {
         const chatHistory = JSON.parse(savedChat);
-        this.messages = chatHistory.map((msg: any) => ({
-          ...msg,
-          timestamp: new Date(msg.timestamp) // Convert string back to Date
-        }));
+        this.messages = chatHistory.map((msg: any) => {
+          const content = String(msg.content || '');
+          const plainContent = content.includes('suggested-questions')
+            ? 'You can ask about Patrick\'s experience, skills, projects, education, or certifications.'
+            : content.replace(/<br\s*\/?>/gi, '\n')
+              .replace(/<[^>]*>/g, '')
+              .replace(/&nbsp;/g, ' ')
+              .replace(/&amp;/g, '&')
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>');
+
+          return {
+            ...msg,
+            content: plainContent,
+            timestamp: new Date(msg.timestamp)
+          };
+        });
 
         // Schedule scroll to bottom after view is initialized
         setTimeout(() => this.scrollToBottom(), 200);

@@ -215,8 +215,10 @@
 
   p {
     margin: 0;
+    white-space: pre-line;
   }
 }
+
 
 .message-time {
   font-size: 0.75rem;
@@ -314,6 +316,7 @@
     }
   }
 }
+
 
 /* New message animation */
 .new-message {
