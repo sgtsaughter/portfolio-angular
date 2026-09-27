@@ -252,7 +252,7 @@ export class ChatbotComponent implements OnInit {
         this.messages = chatHistory.map((msg: any) => {
           const content = String(msg.content || '');
           const plainContent = content.includes('suggested-questions')
-            ? 'You can ask about Patrick\'s experience, skills, projects, education, or certifications.'
+            ? 'You can ask about Patrick\'s experience, skills, projects, education.'
             : content.replace(/<br\s*\/?>/gi, '\n')
               .replace(/<[^>]*>/g, '')
               .replace(/&nbsp;/g, ' ')

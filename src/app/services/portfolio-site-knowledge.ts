@@ -115,7 +115,7 @@ export function isPortfolioQuestion(question: string, facts: PortfolioFact[], co
 function isBroadProfileQuestion(question: string): boolean {
   const refersToPatrick = /\b(?:patrick|he|his|him)\b/i.test(question);
   const asksForOverview = /\b(?:tell me about|who is|overview|background|profile)\b/i.test(question);
-  const asksAboutSpecificTopic = /\b(?:skills?|experience|work history|projects?|education|certifications?|contact|email|phone|career|companies)\b/i.test(question);
+  const asksAboutSpecificTopic = /\b(?:skills?|experience|work history|projects?|education|contact|email|phone|career|companies)\b/i.test(question);
   return refersToPatrick && asksForOverview && !asksAboutSpecificTopic;
 }
 

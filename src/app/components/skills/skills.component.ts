@@ -69,5 +69,4 @@ export class SkillsComponent {  skillCategories: SkillCategory[] = [
   frameworks: string[] = ['Angular', 'Angular JS', 'Drupal 8', 'Drupal 7', 'Drupal 6', 'WordPress', 'Express.js'];
   tools: string[] = ['Git', 'VS Code', 'JIRA', 'Figma', 'Docker', 'Photoshop', 'CI/CD Pipelines'];
   databases: string[] = ['MySQL', 'MongoDB', 'MariaDB', 'PostgreSQL'];
-  certifications: string[] = ['Angular Developer Certification (2021)', 'Certified Drupal Developer (2018)', 'Accessibility Compliance Training (WCAG 2.1)'];
 }
