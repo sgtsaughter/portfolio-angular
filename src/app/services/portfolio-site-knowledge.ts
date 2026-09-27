@@ -3,6 +3,7 @@ export interface PortfolioFact {
   content: string;
   source: string;
   keywords: string[];
+  technologies?: string[];
 }
 
 const stopWords = new Set([
@@ -36,12 +37,18 @@ export function extractPortfolioFacts(root: ParentNode): PortfolioFact[] {
           .map(link => link.getAttribute('href'))
           .filter((href): href is string => Boolean(href));
         const content = `${visibleText} ${links.join(' ')}`.replace(/\s+/g, ' ').trim();
+        const technologies = source === 'Projects'
+          ? Array.from(block.querySelectorAll('.project-tech .tech-chip'))
+            .map(element => element.textContent?.trim() || '')
+            .filter(Boolean)
+          : [];
 
         return {
           title,
           content,
           source: `${source} section`,
-          keywords: [...new Set(tokenize(`${title} ${content}`))]
+          keywords: [...new Set(tokenize(`${title} ${content}`))],
+          technologies
         };
       })
       .filter(fact => fact.content.length > 0);
@@ -101,7 +108,7 @@ export function isPortfolioQuestion(question: string, facts: PortfolioFact[], co
   }
 
   const refersToPatrick = /\b(?:patrick|he|his|him)\b/i.test(question);
-  const namesPortfolioTopic = /\b(?:about|background|profile|experience|work|career|job|skills?|technology|project|education|certification|contact|resume|availability|interest|hobbies|do|does)\b/i.test(question);
+  const namesPortfolioTopic = /\b(?:about|background|profile|experience|work|career|job|skills?|frameworks?|technology|technologies|projects?|education|certification|contact|resume|availability|interest|hobbies|do|does)\b/i.test(question);
   return refersToPatrick && namesPortfolioTopic;
 }
 

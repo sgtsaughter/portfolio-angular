@@ -75,7 +75,7 @@ export class ChatbotService {
       const sources = result.sources.length > 0 ? result.sources.join(', ') : [...new Set(evidence.map(fact => fact.source))].join(', ');
       const content = supportedAnswer
         ? `${answer}\n\nSources: ${sources}`
-        : `Here is what the website directly supports.\n\n${this.formatGroundedFacts(evidence)}`;
+        : `Here is what the website directly supports.\n\n${this.formatGroundedFallback(evidence)}`;
       return { content, sender: 'bot', timestamp: new Date() };
     } finally {
       this.modelStatus$.next('');
@@ -84,6 +84,11 @@ export class ChatbotService {
 
   private formatGroundedFacts(facts: PortfolioFact[]): string {
     return facts.map(fact => `${fact.title}: ${fact.content} (Source: ${fact.source})`).join('\n\n');
+  }
+
+  private formatGroundedFallback(facts: PortfolioFact[]): string {
+    const calculatedFacts = facts.filter(fact => fact.title.startsWith('Calculated project '));
+    return this.formatGroundedFacts(calculatedFacts.length > 0 ? calculatedFacts : facts);
   }
 
   private async requestRemoteAnswer(

@@ -65,4 +65,33 @@ describe('ChatbotService', () => {
     expect(requestBody.conversation.length).toBe(6);
     expect(requestBody.conversation.every((turn: any) => turn.content.length <= 500)).toBeTrue();
   });
+
+  it('uses the calculated summary rather than dumping project records when analysis validation fails', async () => {
+    const evidence = [
+      {
+        title: 'Calculated project technology count',
+        content: 'Angular is listed in 4 of 7 project technology lists.',
+        source: 'Projects section'
+      },
+      {
+        title: 'Drupal project',
+        content: 'A separate project used Drupal.',
+        source: 'Projects section'
+      }
+    ];
+    const stream = [
+      'data: {"type":"token","text":"Angular is maybe a top frontend tool used in many project records."}\n\n',
+      `data: ${JSON.stringify({ type: 'sources', sources: ['Projects section'], evidence })}\n\n`,
+      'data: {"type":"done"}\n\n'
+    ].join('');
+    spyOn(window, 'fetch').and.resolveTo(new Response(stream, {
+      status: 200,
+      headers: { 'content-type': 'text/event-stream' }
+    }));
+
+    const response = await firstValueFrom(service.processMessage('Which framework has Patrick used most in projects?'));
+
+    expect(response.content).toContain('Angular is listed in 4 of 7 project technology lists.');
+    expect(response.content).not.toContain('A separate project used Drupal.');
+  });
 });

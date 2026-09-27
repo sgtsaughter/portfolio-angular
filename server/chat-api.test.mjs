@@ -99,6 +99,34 @@ test('retrieves new website facts for an anything-else follow-up', async () => {
   assert.deepEqual(calls.provider[0].evidence.map(fact => fact.title), ['Greenhill.com']);
 });
 
+test('sends the calculated project technology count instead of all project records', async () => {
+  const { handler, calls } = createHarness();
+  const facts = Array.from({ length: 7 }, (_, index) => ({
+    title: `Project ${index + 1}`,
+    content: index < 4 ? 'This project uses Angular.' : 'This project uses Drupal.',
+    source: 'Projects section',
+    technologies: index < 4 ? ['Angular'] : ['Drupal 8']
+  }));
+  await (await handler(makeRequest('How many times is Angular mentioned across the projects?', { facts }))).text();
+
+  assert.equal(calls.provider[0].evidence.length, 1);
+  const calculation = calls.provider[0].evidence.find(fact => fact.title === 'Calculated project technology count');
+  assert.match(calculation.content, /Angular is listed in 4 of 7 project technology lists/);
+});
+
+test('calculates the most frequently used framework from distinct project cards', async () => {
+  const { handler, calls } = createHarness();
+  const facts = [
+    { title: 'Project A', content: 'Built with Drupal 7.', source: 'Projects section', technologies: ['Drupal 7'] },
+    { title: 'Project B', content: 'Built with Drupal 8.', source: 'Projects section', technologies: ['Drupal 8'] },
+    { title: 'Project C', content: 'Built with Angular.', source: 'Projects section', technologies: ['Angular'] }
+  ];
+  await (await handler(makeRequest('What framework has Patrick used most in his projects?', { facts }))).text();
+
+  const calculation = calls.provider[0].evidence.find(fact => fact.title === 'Calculated project framework analysis');
+  assert.match(calculation.content, /Drupal is the most frequently listed framework, appearing in 2 of 3 project cards/);
+});
+
 test('trims a long seven-turn conversation instead of rejecting the request', async () => {
   const { handler, calls } = createHarness();
   const conversation = Array.from({ length: 7 }, (_, index) => ({
@@ -176,6 +204,9 @@ test('OpenAI adapter requests GPT-6 Luna with storage disabled and streams text/
   assert.equal(captured.options.headers.authorization, 'Bearer test-key');
   assert.equal(captured.body.model, 'gpt-6-luna');
   assert.equal(captured.body.store, false);
+  assert.match(captured.body.instructions, /use any supplied calculated-analysis evidence as authoritative/i);
+  assert.match(captured.body.instructions, /warm and conversational/i);
+  assert.match(captured.body.instructions, /Never invent, assume, or infer/i);
   assert.deepEqual(events, [{ type: 'token', text: 'Yes.' }]);
 });
 

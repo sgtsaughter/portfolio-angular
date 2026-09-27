@@ -18,6 +18,7 @@ describe('portfolio site knowledge', () => {
         <article data-chat-content>
           <h3>Attune Insurance Application</h3>
           <p>Patrick maintained the small-business insurance application from January to August 2017.</p>
+          <div class="project-tech"><span class="tech-chip">Angular</span><span class="tech-chip">Drupal 8</span></div>
         </article>
       </section>
       <section id="experience">
@@ -40,7 +41,9 @@ describe('portfolio site knowledge', () => {
 
   it('extracts rendered content with section provenance', () => {
     expect(facts.length).toBe(4);
-    expect(facts.find(fact => fact.title === 'Attune Insurance Application')?.source).toBe('Projects section');
+    const project = facts.find(fact => fact.title === 'Attune Insurance Application');
+    expect(project?.source).toBe('Projects section');
+    expect(project?.technologies).toEqual(['Angular', 'Drupal 8']);
   });
 
   it('retrieves a named project without neighboring project content', () => {
