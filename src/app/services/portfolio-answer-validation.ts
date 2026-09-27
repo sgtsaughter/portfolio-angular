@@ -1,4 +1,4 @@
-import { PortfolioFact } from './portfolio-knowledge';
+import { PortfolioFact } from './portfolio-site-knowledge';
 
 const ignoredAnswerTerms = new Set([
   'a', 'about', 'an', 'and', 'are', 'as', 'at', 'be', 'but', 'by', 'can', 'do', 'does',
@@ -16,10 +16,11 @@ function tokenize(text: string): string[] {
     .map(token => token.endsWith('ies') ? `${token.slice(0, -3)}y` : token.endsWith('s') ? token.slice(0, -1) : token);
 }
 
-export function isAnswerSupported(answer: string, facts: PortfolioFact[]): boolean {
+export function isAnswerSupported(answer: string, facts: PortfolioFact[], question = ''): boolean {
   const answerTokens = [...new Set(tokenize(answer))];
-  const evidenceTokens = new Set(facts.flatMap(fact => tokenize(`${fact.title} ${fact.content} ${fact.keywords.join(' ')}`)));
-  const unsupportedTokens = answerTokens.filter(token => token.length >= 4 && !evidenceTokens.has(token));
+  const evidenceTokens = new Set(facts.flatMap(fact => tokenize(`${fact.title} ${fact.content} ${(fact.keywords || []).join(' ')}`)));
+  const questionTokens = new Set(tokenize(question));
+  const unsupportedTokens = answerTokens.filter(token => token.length >= 4 && !evidenceTokens.has(token) && !questionTokens.has(token));
   const answerYears = answer.match(/\b(?:19|20)\d{2}\b/g) || [];
   const evidenceYears = facts.flatMap(fact => fact.content.match(/\b(?:19|20)\d{2}\b/g) || []);
 

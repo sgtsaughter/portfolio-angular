@@ -13,7 +13,7 @@
       </div>
 
       <div class="ai-projects-container">
-        <div *ngFor="let project of aiExperience.projects" class="ai-project-card">
+        <div *ngFor="let project of aiExperience.projects" class="ai-project-card" data-chat-content>
           <mat-card>
             <mat-card-header>
               <mat-card-title>{{ project.name }}</mat-card-title>
@@ -31,7 +31,7 @@
     </div>
 
     <div class="experience-timeline">
-      <div *ngFor="let exp of experiences; let i = index" class="experience-item" [class.left]="i % 2 === 0" [class.right]="i % 2 !== 0">
+      <div *ngFor="let exp of experiences; let i = index" class="experience-item" [class.left]="i % 2 === 0" [class.right]="i % 2 !== 0" data-chat-content>
         <div class="timeline-dot"></div>        <mat-card class="experience-card">
           <mat-card-header>
             <div class="company-logo" *ngIf="exp.logoUrl">

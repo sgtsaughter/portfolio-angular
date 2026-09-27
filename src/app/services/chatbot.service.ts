@@ -1,26 +1,21 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, from } from 'rxjs';
+import { Inject, Injectable } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { BehaviorSubject, Observable, Subject, from } from 'rxjs';
 import {
-  answerUnlistedExperienceQuestion,
+  extractPortfolioFacts,
   findAdditionalPortfolioFacts,
   findRelevantPortfolioFacts,
   isAdditionalInformationQuestion,
+  isPortfolioQuestion,
   PortfolioFact
-} from './portfolio-knowledge';
+} from './portfolio-site-knowledge';
 import { isAnswerSupported } from './portfolio-answer-validation';
 
-const MODEL_ID = 'HuggingFaceTB/SmolLM2-135M-Instruct';
-
-interface WorkerResponse {
-  id: string;
-  content?: string;
-  error?: string;
-  status?: string;
-}
-
-interface PendingRequest {
-  resolve: (content: string) => void;
-  reject: (error: Error) => void;
+interface ChatStreamEvent {
+  type: 'token' | 'sources' | 'refusal' | 'error' | 'done';
+  text?: string;
+  sources?: string[];
+  evidence?: PortfolioFact[];
 }
 
 export interface ChatMessage {
@@ -28,137 +23,141 @@ export interface ChatMessage {
   sender: 'user' | 'bot';
   timestamp: Date;
 }
-
 @Injectable({
   providedIn: 'root'
 })
 export class ChatbotService {
-  private worker: Worker | null = null;
   private requestId = 0;
-  private pendingRequests = new Map<string, PendingRequest>();
   readonly modelStatus$ = new BehaviorSubject<string>('');
+  readonly generatedText$ = new Subject<{ requestId: string; text: string }>();
 
-  processMessage(message: string, conversation: ChatMessage[] = []): Observable<ChatMessage> {
-    return from(this.createResponse(message, conversation));
+  constructor(@Inject(DOCUMENT) private document: Document) { }
+
+  processMessage(message: string, conversation: ChatMessage[] = [], requestId = String(++this.requestId)): Observable<ChatMessage> {
+    return from(this.createResponse(message, conversation, requestId));
   }
 
-  private async createResponse(message: string, conversation: ChatMessage[]): Promise<ChatMessage> {
-    if (isAdditionalInformationQuestion(message)) {
-      const previousAnswers = conversation
-        .filter(item => item.sender === 'bot')
-        .map(item => item.content);
-      const additionalFacts = findAdditionalPortfolioFacts(previousAnswers);
-      const content = additionalFacts.length > 0
-        ? this.formatGroundedFacts(additionalFacts)
-        : 'I have shared the portfolio information available so far. Ask about a specific area such as experience, skills, projects, education, or contact details.';
-      return { content, sender: 'bot', timestamp: new Date() };
+  private async createResponse(message: string, conversation: ChatMessage[], requestId: string): Promise<ChatMessage> {
+    const websiteFacts = extractPortfolioFacts(this.document);
+    const previousAnswers = conversation.filter(item => item.sender === 'bot').map(item => item.content);
+    const relevantFacts = isAdditionalInformationQuestion(message)
+      ? findAdditionalPortfolioFacts(previousAnswers, websiteFacts)
+      : findRelevantPortfolioFacts(message, websiteFacts);
+    const inScope = isPortfolioQuestion(message, websiteFacts, previousAnswers);
+
+    if (!inScope) {
+      return {
+        content: 'I can answer questions about information on this portfolio, such as Patrick\'s experience, skills, projects, education, or contact details.',
+        sender: 'bot',
+        timestamp: new Date()
+      };
     }
 
-    const unlistedExperienceAnswer = answerUnlistedExperienceQuestion(message);
-    const facts = findRelevantPortfolioFacts(message);
-    let content: string;
+    if (websiteFacts.length === 0) {
+      return {
+        content: 'I could not read the portfolio content needed to answer that.',
+        sender: 'bot',
+        timestamp: new Date()
+      };
+    }
 
-    if (unlistedExperienceAnswer) {
-      content = unlistedExperienceAnswer;
-    } else if (facts.length === 0) {
-      content = 'I can only answer questions supported by this portfolio. Ask about the profile, experience, skills, projects, education, contact information, or certifications.';
-    } else if (!requiresSynthesis(message)) {
-      content = this.formatDirectAnswer(message, facts);
-    } else {
-      const groundedFallback = this.formatGroundedFacts(facts);
-      try {
-        const answer = await this.requestLocalAnswer(message, facts);
-        const supportedAnswer = isAnswerSupported(answer, facts);
-        content = supportedAnswer
-          ? `${answer}\n\nSources: ${facts.map(fact => fact.source).join(', ')}`
-          : `Here is what the portfolio directly supports.\n\n${groundedFallback}`;
-      } catch {
-        content = `The local model is unavailable, so here is the relevant portfolio information instead.\n\n${groundedFallback}`;
-      } finally {
-        this.modelStatus$.next('');
+    const fallbackFacts = relevantFacts.length > 0 ? relevantFacts : websiteFacts.slice(0, 4);
+    const groundedFallback = this.formatGroundedFacts(fallbackFacts);
+    this.modelStatus$.next('Sending the website context to OpenAI...');
+    try {
+      const result = await this.requestRemoteAnswer(message, websiteFacts, conversation.slice(-8), requestId);
+      if (result.refusal) {
+        return { content: result.answer, sender: 'bot', timestamp: new Date() };
       }
+      const answer = result.answer.trim();
+      const evidence = result.evidence.length > 0 ? result.evidence : fallbackFacts;
+      const supportedAnswer = isAnswerSupported(answer, evidence, message);
+      const sources = result.sources.length > 0 ? result.sources.join(', ') : [...new Set(evidence.map(fact => fact.source))].join(', ');
+      const content = supportedAnswer
+        ? `${answer}\n\nSources: ${sources}`
+        : `Here is what the website directly supports.\n\n${this.formatGroundedFacts(evidence)}`;
+      return { content, sender: 'bot', timestamp: new Date() };
+    } finally {
+      this.modelStatus$.next('');
     }
-
-    return { content, sender: 'bot', timestamp: new Date() };
   }
 
   private formatGroundedFacts(facts: PortfolioFact[]): string {
     return facts.map(fact => `${fact.title}: ${fact.content} (Source: ${fact.source})`).join('\n\n');
   }
 
-  private formatDirectAnswer(message: string, facts: PortfolioFact[]): string {
-    if (isExistenceQuestion(message)) {
-      const sources = [...new Set(facts.map(fact => fact.source))].join(', ');
-      return `Yes. ${facts.map(fact => fact.content).join(' ')} (Source: ${sources})`;
-    }
+  private async requestRemoteAnswer(
+    message: string,
+    facts: PortfolioFact[],
+    conversation: ChatMessage[],
+    requestId: string
+  ): Promise<{ answer: string; sources: string[]; evidence: PortfolioFact[]; refusal: boolean }> {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 120_000);
+    let answer = '';
+    let sources: string[] = [];
+    let evidence: PortfolioFact[] = [];
+    let refusal = false;
 
-    return this.formatGroundedFacts(facts);
-  }
-
-  private requestLocalAnswer(message: string, facts: PortfolioFact[]): Promise<string> {
-    return new Promise((resolve, reject) => {
-      try {
-        const worker = this.getWorker();
-        const id = String(++this.requestId);
-        this.pendingRequests.set(id, { resolve, reject });
-        worker.postMessage({
-          id,
-          modelId: MODEL_ID,
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json', accept: 'text/event-stream' },
+        body: JSON.stringify({
           question: message.slice(0, 500),
-          evidence: facts.map(({ title, content, source }) => ({ title, content, source }))
-        });
+          facts,
+          conversation: conversation.slice(-6).map(({ sender, content }) => ({
+            sender,
+            content: content.slice(0, 500)
+          }))
+        }),
+        signal: controller.signal
+      });
 
-        setTimeout(() => {
-          const pending = this.pendingRequests.get(id);
-          if (pending) {
-            this.pendingRequests.delete(id);
-            pending.reject(new Error('Local model request timed out'));
+      if (!response.ok) {
+        const error = await response.json().catch(() => ({}));
+        throw new Error(error.error || `AI endpoint returned ${response.status}`);
+      }
+      if (!response.body) {
+        throw new Error('AI endpoint did not return a response stream');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { value, done } = await reader.read();
+        buffer += decoder.decode(value, { stream: !done });
+        let boundary: number;
+        while ((boundary = buffer.indexOf('\n\n')) >= 0) {
+          const frame = buffer.slice(0, boundary);
+          buffer = buffer.slice(boundary + 2);
+          const data = frame.split('\n').find(line => line.startsWith('data:'))?.slice(5).trim();
+          if (!data || data === '[DONE]') continue;
+
+          const event = JSON.parse(data) as ChatStreamEvent;
+          if (event.type === 'token' && event.text) {
+            answer += event.text;
+            this.generatedText$.next({ requestId, text: event.text });
+          } else if (event.type === 'sources') {
+            sources = event.sources || [];
+            evidence = event.evidence || [];
+          } else if (event.type === 'refusal') {
+            answer = event.text || '';
+            refusal = true;
+          } else if (event.type === 'error') {
+            throw new Error(event.text || 'AI endpoint failed');
           }
-        }, 120_000);
-      } catch (error) {
-        reject(error instanceof Error ? error : new Error('Local model could not be started'));
+        }
+        if (done) break;
       }
-    });
-  }
 
-  private getWorker(): Worker {
-    if (this.worker) {
-      return this.worker;
-    }
-
-    const worker = new Worker(new URL('./chatbot.worker', import.meta.url), { type: 'module' });
-    worker.onmessage = ({ data }: MessageEvent<WorkerResponse>) => {
-      if (data.status) {
-        this.modelStatus$.next(data.status);
-        return;
-      }
-      const pending = this.pendingRequests.get(data.id);
-      if (!pending) {
-        return;
-      }
-      this.pendingRequests.delete(data.id);
+      return { answer, sources, evidence, refusal };
+    } finally {
+      clearTimeout(timeoutId);
       this.modelStatus$.next('');
-      if (data.error) {
-        pending.reject(new Error(data.error));
-      } else {
-        pending.resolve(data.content || '');
-      }
-    };
-    worker.onerror = () => {
-      this.pendingRequests.forEach(pending => pending.reject(new Error('Local model worker failed')));
-      this.pendingRequests.clear();
-      worker.terminate();
-      this.worker = null;
-    };
-    this.worker = worker;
-    return worker;
+    }
   }
 }
 
-function requiresSynthesis(message: string): boolean {
-  return /\b(?:analy[sz]e|compare|explain|recommend|summari[sz]e|why)\b/i.test(message);
-}
-
-function isExistenceQuestion(message: string): boolean {
-  return /\b(?:was|were|is|are)\s+there\b|\b(?:did|has)\s+(?:patrick|he)\s+(?:ever\s+)?(?:work|worked|build|built|develop|developed)\b/i.test(message);
-}

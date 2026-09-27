@@ -4,9 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:api:dev": "node --env-file=server/.env server/local-dev.mjs",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:server": "node --test server/chat-api.test.mjs"
   },
   "private": true,
   "dependencies": {
@@ -20,7 +22,6 @@
     "@angular/platform-browser": "^18.0.0",
     "@angular/platform-browser-dynamic": "^18.0.0",
     "@angular/router": "^18.0.0",
-    "@huggingface/transformers": "^4.3.0",
     "bootstrap": "^5.3.6",
     "gsap": "^3.13.0",
     "ngx-scrollspy": "^1.2.1",
