@@ -11,8 +11,6 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { ResponsiveTesterComponent } from '../responsive-tester/responsive-tester.component';
 
 @Component({
   selector: 'app-chatbot',
@@ -25,8 +23,7 @@ import { ResponsiveTesterComponent } from '../responsive-tester/responsive-teste
     MatInputModule,
     MatCardModule,
     MatBadgeModule,
-    MatTooltipModule,
-    MatDialogModule
+    MatTooltipModule
   ],
   templateUrl: './chatbot.component.html',
   styleUrl: './chatbot.component.scss'
@@ -49,8 +46,7 @@ export class ChatbotComponent implements OnInit {
   constructor(
     private chatbotService: ChatbotService,
     private analyticsService: AnalyticsService,
-    private accessibilityService: AccessibilityService,
-    private dialog: MatDialog
+    private accessibilityService: AccessibilityService
   ) {
     this.chatbotService.modelStatus$.subscribe(status => this.modelStatus = status);
     this.chatbotService.generatedText$.subscribe(({ requestId, text }) => {
@@ -289,14 +285,4 @@ export class ChatbotComponent implements OnInit {
     this.addBotMessage(`Hi there! 👋 I've cleared our previous conversation. What would you like to know about Patrick?`);
   }
 
-  // Open responsive design tester
-  openResponsiveTester(): void {
-    this.dialog.open(ResponsiveTesterComponent, {
-      maxWidth: '90vw',
-      maxHeight: '90vh',
-      width: '90vw',
-      height: '90vh',
-      panelClass: 'responsive-tester-dialog',
-    });
-  }
 }
